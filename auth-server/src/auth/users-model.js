@@ -39,6 +39,21 @@ users.statics.createFromOauth = function(email) {
 
 };
 
+users.statics.authenticateToken = function(token) {
+  // Vinicio - JWT will decrypt tokens if you call the verify function
+  const decrpytedToken = jwt.verify(token, process.env.SECRET || 'secret');
+  // Vinicio , now I'm expecting something that looks like this
+  // {
+  //   id: this._id,
+  //   role: this.role,
+  // };
+  //Vinicio - now that I have this, I'm going to find a user based on the id
+  const query = {_id: decrpytedToken.id};
+  return this.findOne(query);
+};
+
+
+
 users.statics.authenticateBasic = function(auth) {
   let query = {username:auth.username};
   return this.findOne(query)
