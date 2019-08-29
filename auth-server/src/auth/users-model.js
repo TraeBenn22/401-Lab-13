@@ -40,17 +40,16 @@ users.statics.createFromOauth = function(email) {
 };
 
 users.statics.authenticateToken = function(token) {
-  // Vinicio - JWT will decrypt tokens if you call the verify function
   const decrpytedToken = jwt.verify(token, process.env.SECRET || 'secret');
-  // Vinicio , now I'm expecting something that looks like this
-  // {
-  //   id: this._id,
-  //   role: this.role,
-  // };
-  //Vinicio - now that I have this, I'm going to find a user based on the id
   const query = {_id: decrpytedToken.id};
   return this.findOne(query);
 };
+
+// users.statics.authenticateToken = function(token) {
+//   const decryptedToken = jwt.verify(toke, process.env.SECRET);
+//   const query = {_id: decryptedToken.id};
+//   return this.findOne(query);
+// }
 
 
 
@@ -67,13 +66,39 @@ users.methods.comparePassword = function(password) {
 };
 
 users.methods.generateToken = function() {
-  
+
   let token = {
     id: this._id,
     role: this.role,
   };
-  
+
   return jwt.sign(token, process.env.SECRET);
 };
 
+
+// users.methods.timeOutGenerateToken = function() {
+//
+//   let token = {
+//     id: this._id,
+//     role: this.role,
+//   };
+//
+//   return jwt.sign(token, process.env.SECRET, {expiresIn: '15m'});
+// };
+
+// users.methods.singleUseGenerateToken = function() {
+//
+//   let token = {
+//     id: this._id,
+//     role: this.role,
+//   };
+//
+//   return jwt.sign(token);
+// };
+
+
+
+// jwt.sign({User}, 'secretkey', {expiresIn: '15m'}, (token) => {
+//   res.send(token);
+// });
 module.exports = mongoose.model('users', users);

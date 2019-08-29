@@ -20,6 +20,11 @@ authRouter.post('/signup', (req, res, next) => {
 });
 
 authRouter.post('/signin', auth, (req, res, next) => {
+    // get rid of old token, create a new one and send it
+    if(req.token) {
+        generateToken();
+
+    }
   res.cookie('auth', req.token);
   res.send(req.token);
 });
@@ -33,3 +38,16 @@ authRouter.get('/oauth', (req,res,next) => {
 });
 
 module.exports = authRouter;
+
+
+Router.post('/keys', auth, (req, res, next) => {
+    let user = new User(req.body);
+    user.save()
+        .then( (user) => {
+            req.token = user.generateToken();
+            req.user = user;
+            res.set('token', req.token);
+            res.cookie('auth', req.token);
+            res.send(req.token);
+        });
+});

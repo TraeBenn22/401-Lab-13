@@ -36,11 +36,25 @@ module.exports = (req, res, next) => {
     // Vinicio - this is a very similar function to
     // 'authenticateBasic' but it starts by validating a token
     return User.authenticateToken(authString)
-        .then( user => _authenticate(user) )
+        .then(user => _authenticate(user))
         .catch(next);
+  }
 
-    jwt.sign();
+  // function _authBearerWithTimeout(authString) {
+  //   // Vinicio - this is a very similar function to
+  //   // 'authenticateBasic' but it starts by validating a token
+  //   return User.authenticateToken(authString)
+  //       .then(user => _authenticate(user))
+  //       .catch(next);
+  // }
 
+  // function _authBearer(authString) {
+  //   // Vinicio - this is a very similar function to
+  //   // 'authenticateBasic' but it starts by validating a token
+  //   return User.authenticateToken(authString)
+  //       .then(user => _authenticate(user))
+  //       .catch(next);
+  // }
 
   function _authenticate(user) {
     if(user) {
@@ -52,6 +66,28 @@ module.exports = (req, res, next) => {
       _authError();
     }
   }
+
+  // function _authenticate(user) {
+  //   if(user) {
+  //     req.user = user;
+  //     req.token = user.timeOutgenerateToken();
+  //     next();
+  //   }
+  //   else {
+  //     _authError();
+  //   }
+  // }
+
+  // function _authenticate(user) {
+  //   if(user) {
+  //     req.user = user;
+  //     req.token = user.singleUsegenerateToken();
+  //     next();
+  //   }
+  //   else {
+  //     _authError();
+  //   }
+  // }
   
   function _authError() {
     next('Invalid User ID/Password');
